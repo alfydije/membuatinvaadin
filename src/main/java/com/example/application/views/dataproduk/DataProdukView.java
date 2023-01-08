@@ -56,9 +56,7 @@ public class DataProdukView extends Div implements BeforeEnterObserver {
     private TextField detail;
     private Upload gambar;
     private Image gambarPreview;
-    private DatePicker dateOfBirth;
-    private TextField occupation;
-    private TextField role;
+
     private Checkbox important;
 
     private final Button cancel = new Button("Cancel");
@@ -97,9 +95,6 @@ public class DataProdukView extends Div implements BeforeEnterObserver {
                 });
         grid.addColumn(gambarRenderer).setHeader("Gambar").setWidth("96px").setFlexGrow(0);
 
-        grid.addColumn("dateOfBirth").setAutoWidth(true);
-        grid.addColumn("occupation").setAutoWidth(true);
-        grid.addColumn("role").setAutoWidth(true);
         LitRenderer<DataProduk> importantRenderer = LitRenderer.<DataProduk>of(
                 "<vaadin-icon icon='vaadin:${item.icon}' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: ${item.color};'></vaadin-icon>")
                 .withProperty("icon", important -> important.isImportant() ? "check" : "minus").withProperty("color",
@@ -196,11 +191,8 @@ public class DataProdukView extends Div implements BeforeEnterObserver {
         gambar = new Upload();
         gambar.getStyle().set("box-sizing", "border-box");
         gambar.getElement().appendChild(gambarPreview.getElement());
-        dateOfBirth = new DatePicker("Date Of Birth");
-        occupation = new TextField("Occupation");
-        role = new TextField("Role");
         important = new Checkbox("Important");
-        formLayout.add(nama, harga, detail, gambarLabel, gambar, dateOfBirth, occupation, role, important);
+        formLayout.add(nama, harga, detail, gambarLabel, gambar, important);
 
         editorDiv.add(formLayout);
         createButtonLayout(editorLayoutDiv);
