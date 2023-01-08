@@ -3,6 +3,7 @@ package com.example.application.views.contactus;
 import com.example.application.data.entity.ContactUs;
 import com.example.application.data.service.ContactUsService;
 import com.example.application.views.MainLayout;
+import com.example.application.views.checkout.CheckoutView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -45,6 +46,7 @@ public class ContactUsView extends Div implements BeforeEnterObserver {
 
     private final Button cancel = new Button("Cancel");
     private final Button save = new Button("Save");
+    private Button delete = new Button("Delete");
 
     private final BeanValidationBinder<ContactUs> binder;
 
@@ -94,6 +96,24 @@ public class ContactUsView extends Div implements BeforeEnterObserver {
         cancel.addClickListener(e -> {
             clearForm();
             refreshGrid();
+        });
+
+        delete.addClickListener(e -> {
+            try{
+            if (this.contactUs == null) {
+                Notification.show("Silahkan Pilih Pesan");
+            } else {
+                binder.writeBean(this.contactUs);
+
+                contactUsService.delete(this.contactUs.getId());
+                clearForm();
+                refreshGrid();
+                Notification.show("Pesan Telah dihapus");
+                UI.getCurrent().navigate(ContactUsView.class);
+            }
+        }catch (ValidationException validationException){
+                Notification.show("Kesalahan saat Menghapus");
+            }
         });
 
         save.addClickListener(e -> {
@@ -162,7 +182,8 @@ public class ContactUsView extends Div implements BeforeEnterObserver {
         buttonLayout.setClassName("button-layout");
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonLayout.add(save, cancel);
+        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonLayout.add(save, delete,cancel);
         editorLayoutDiv.add(buttonLayout);
     }
 
